@@ -187,7 +187,7 @@
             text-align: center;
             padding: 180px 24px 80px;
             margin-top: 80px;
-            background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+            background: #ffffff;
             position: relative;
             overflow: hidden;
         }
@@ -195,30 +195,19 @@
         header::before {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(66, 133, 244, 0.06) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: float 8s ease-in-out infinite;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(66, 133, 244, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(11, 87, 58, 0.02) 0%, transparent 50%);
+            z-index: 0;
         }
 
-        header::after {
-            content: '';
-            position: absolute;
-            bottom: -30%;
-            left: -10%;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(11, 87, 58, 0.04) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: float 10s ease-in-out infinite reverse;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) translateX(0px); }
-            50% { transform: translateY(-30px) translateX(20px); }
+        header .container {
+            position: relative;
+            z-index: 1;
         }
 
         h1 {
@@ -709,6 +698,125 @@
                 }, 2000);
             });
         }
+
+        // Aurora Fluid Animation for Header
+        (function() {
+            var headerSection = document.querySelector('header');
+            var canvas = document.getElementById('headerFluidCanvas');
+            if (!canvas) return;
+
+            var ctx = canvas.getContext('2d');
+            var DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+            function resizeCanvas() {
+                var rect = headerSection.getBoundingClientRect();
+                canvas.width = Math.floor(rect.width * DPR);
+                canvas.height = Math.floor(rect.height * DPR);
+                canvas.style.width = rect.width + 'px';
+                canvas.style.height = rect.height + 'px';
+                ctx.setTransform(DPR,0,0,DPR,0,0);
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            // particles with blue and green theme
+            var NUM = Math.max(25, Math.floor((canvas.width * canvas.height) / (700*400) * 35));
+            var particles = [];
+            for (var i=0;i<NUM;i++){
+                var isBlue = Math.random() > 0.5;
+                particles.push({
+                    x: Math.random()*canvas.width/DPR,
+                    y: Math.random()*canvas.height/DPR,
+                    vx: (Math.random()-0.5)*0.4,
+                    vy: (Math.random()-0.5)*0.4,
+                    size: (60 + Math.random()*100),
+                    hue: isBlue ? (200 + Math.random()*40) : (140 + Math.random()*40), // Blue or green tones
+                    alpha: 0.12 + Math.random()*0.08
+                });
+            }
+
+            // mouse state
+            var mouse = { x: canvas.width/2/DPR, y: canvas.height/2/DPR, px: canvas.width/2/DPR, py: canvas.height/2/DPR, down:false, speed:0 };
+
+            function getLocalCoords(e) {
+                var rect = canvas.getBoundingClientRect();
+                var cx = e.touches ? e.touches[0].clientX : e.clientX;
+                var cy = e.touches ? e.touches[0].clientY : e.clientY;
+                return { x: cx - rect.left, y: cy - rect.top };
+            }
+
+            function onPointerMove(e){
+                var coords = getLocalCoords(e);
+                mouse.x = coords.x;
+                mouse.y = coords.y;
+                var dx = mouse.x - mouse.px;
+                var dy = mouse.y - mouse.py;
+                var dist = Math.sqrt(dx*dx + dy*dy);
+                mouse.speed = Math.min(200, dist * 2);
+                mouse.px = mouse.x;
+                mouse.py = mouse.y;
+            }
+            canvas.addEventListener('mousemove', onPointerMove, {passive:true});
+            canvas.addEventListener('touchmove', onPointerMove, {passive:true});
+            canvas.addEventListener('mousedown', ()=> mouse.down = true);
+            canvas.addEventListener('mouseup', ()=> mouse.down = false);
+            canvas.addEventListener('touchstart', ()=> mouse.down = true, {passive:true});
+            canvas.addEventListener('touchend', ()=> mouse.down = false, {passive:true});
+
+            function applyPointerForce(p, mx, my, options){
+                var dx = p.x - mx;
+                var dy = p.y - my;
+                var dist = Math.sqrt(dx*dx + dy*dy);
+                if (dist > options.radius) return;
+                var inv = 1 - (dist / options.radius);
+                var base = (options.strength * (0.6 + 0.4 * (mouse.speed/100))) * inv;
+                var dragBoost = mouse.down ? 2.0 : 1.0;
+                p.vx += (dx / dist || 0) * base * -0.6 * dragBoost;
+                p.vy += (dy / dist || 0) * base * -0.6 * dragBoost;
+            }
+
+            function render(){
+                ctx.clearRect(0,0,canvas.width/DPR, canvas.height/DPR);
+
+                var strength = 1.4;
+                var radius = 200;
+                var viscosity = 0.94;
+
+                mouse.speed *= 0.92;
+
+                for (var i=0; i<particles.length; i++){
+                    var p = particles[i];
+                    p.vx += (Math.sin((p.x + performance.now()*0.00008) * 0.002 + p.hue) * 0.0008);
+                    p.vy += (Math.cos((p.y + performance.now()*0.0001) * 0.002 + p.hue) * 0.0008);
+
+                    applyPointerForce(p, mouse.x, mouse.y, { strength, radius });
+
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    p.vx *= viscosity;
+                    p.vy *= viscosity;
+
+                    var w = canvas.width/DPR, h = canvas.height/DPR;
+                    if (p.x < -p.size) p.x = w + p.size;
+                    if (p.x > w + p.size) p.x = -p.size;
+                    if (p.y < -p.size) p.y = h + p.size;
+                    if (p.y > h + p.size) p.y = -p.size;
+
+                    var g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
+                    var hcol = (p.hue + (mouse.x/w)*20) % 360;
+                    g.addColorStop(0, `hsla(${hcol}, 75%, 60%, ${p.alpha})`);
+                    g.addColorStop(0.5, `hsla(${(hcol+20)%360}, 65%, 55%, ${p.alpha*0.5})`);
+                    g.addColorStop(1, `hsla(${(hcol+40)%360}, 60%, 50%, 0)`);
+                    ctx.fillStyle = g;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+                    ctx.fill();
+                }
+                requestAnimationFrame(render);
+            }
+            requestAnimationFrame(render);
+        })();
     </script>
 </body>
 </html>
