@@ -1,0 +1,451 @@
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #5f6368;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+            background-color: #f8f9fa;
+        }
+
+        .hero-label {
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: #5f6368;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 400;
+            color: #202124;
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.3;
+        }
+
+        .tabs {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .tabs-container {
+            display: inline-flex;
+            background-color: #2b4a5991;
+            border-radius: 30px;
+            padding: 4px;
+            backdrop-filter: blur(10px);
+        }
+
+        .tabs ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: inline-flex;
+            gap: 0;
+        }
+
+        .tabs li {
+            padding: 10px 28px;
+            background-color: transparent;
+            border-radius: 26px;
+            cursor: pointer;
+            color: #5f6368;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .tabs li::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 26px;
+            background-color: #fffffff4;
+            opacity: 0;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: -1;
+        }
+
+        .tabs li:hover {
+            color: #202124;
+        }
+
+        .tabs li.active {
+            color: #125467;
+        }
+
+        .tabs li.active::after {
+            opacity: 1;
+        }
+
+        .section {
+            padding: 100px 20px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1.2s cubic-bezier(0.22, 0.61, 0.36, 1), 
+                        transform 1.2s cubic-bezier(0.22, 0.61, 0.36, 1);
+            background-color: #f8f9fa;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .content > * {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s cubic-bezier(0.22, 0.61, 0.36, 1), 
+                        transform 1s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+
+        .section.visible .content > * {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .content > *:nth-child(1) { transition-delay: 0.1s; }
+        .content > *:nth-child(2) { transition-delay: 0.2s; }
+        .content > *:nth-child(3) { transition-delay: 0.3s; }
+        .content > *:nth-child(4) { transition-delay: 0.4s; }
+        .content > *:nth-child(5) { transition-delay: 0.5s; }
+        .content > *:nth-child(6) { transition-delay: 0.6s; }
+
+        h2 {
+            font-size: 40px;
+            font-weight: 400;
+            color: #202124;
+            margin-bottom: 32px;
+            letter-spacing: -0.5px;
+        }
+
+        p {
+            color: #5f6368;
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+            background-color: #f8f9fa;
+            opacity: 0;
+            animation: fadeInDown 1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.2s forwards;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .visual-section {
+            position: relative;
+            background-color: #f8f9fa;
+            color: #202124;
+            padding: 0;
+            text-align: center;
+            overflow: visible;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1.2s cubic-bezier(0.22, 0.61, 0.36, 1), 
+                        transform 1.2s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+
+        .visual-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .visual-section.visible blockquote {
+            animation: quoteReveal 1.4s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s backwards;
+        }
+
+        @keyframes quoteReveal {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .visual-section::before {
+            display: none;
+        }
+
+        .image-container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            margin: 0;
+            border-radius: 0;
+            overflow: hidden;
+        }
+
+        .image-container img {
+            width: 774px;
+            height: 370.13px;
+            max-width: 100%;
+            display: block;
+            object-fit: cover;
+            margin: 0 auto;
+        }
+
+        .placeholder-image {
+            width: 100%;
+            height: 600px;
+            background: linear-gradient(135deg, #0a1628 0%, #1a2f5a 30%, #2554a0 70%, #1a73e8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.4);
+            font-size: 18px;
+            position: relative;
+        }
+
+        .placeholder-image::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(26,115,232,0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+        }
+
+        .image-container {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 1.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.4s, 
+                        transform 1.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.4s;
+        }
+
+        .section.visible .image-container {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        blockquote {
+            position: relative;
+            z-index: 5;
+            font-size: 52px;
+            font-weight: 400;
+            color: #1a73e8;
+            max-width: 1100px;
+            margin: 120px auto 0;
+            padding: 0 60px;
+            line-height: 1.4;
+            letter-spacing: -0.5px;
+        }
+
+        blockquote::before {
+            content: '"';
+            font-size: 200px;
+            color: #1a73e8;
+            position: absolute;
+            left: 0;
+            top: -80px;
+            font-family: Georgia, serif;
+            opacity: 1;
+            line-height: 1;
+        }
+
+        .quote-author {
+            display: block;
+            font-size: 11px;
+            color: #80868b;
+            margin-top: 48px;
+            margin-bottom: 120px;
+            font-style: normal;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .quote-author-name {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .quote-author-title {
+            display: block;
+            color: #9aa0a6;
+        }
+
+        strong {
+            color: #202124;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            h2 {
+                font-size: 32px;
+            }
+
+            blockquote {
+                font-size: 32px;
+            }
+
+            blockquote::before {
+                font-size: 80px;
+                left: -30px;
+            }
+
+            .tabs ul {
+                flex-wrap: wrap;
+            }
+
+            p {
+                font-size: 16px;
+            }
+
+            .section {
+                padding: 60px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="tabs">
+        <div class="tabs-container">
+            <ul>
+                <li data-target="vision" class="active">Our vision</li>
+                <li data-target="journey">Our journey</li>
+                <li data-target="models">Our models</li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="vision" class="section visible">
+        <div class="content">
+            <h2>Our vision</h2>
+            <p>We live in an exciting era when AI research and technology are delivering extraordinary advances.</p>
+            <p>In the coming years, AI — and ultimately artificial general intelligence (AGI) — has the potential to drive one of the greatest transformations in history.</p>
+            <p>We're a team of scientists, engineers, ethicists and more, working to build the next generation of AI systems safely and responsibly.</p>
+            <p>By solving some of the hardest scientific and engineering challenges of our time, we're working to create breakthrough technologies that could advance science, transform work, serve diverse communities — and improve billions of people's lives.</p>
+        </div>
+
+    <div class="image-container">
+  <img src="AionAI1.png" alt="3D Molecular Visualization" class="molecule-image" style="width:850px; height:500.13px; object-fit:cover; display:block; margin:0 auto;">
+</div>
+
+    </section>
+
+    <section class="visual-section">
+        <blockquote>
+            Learning molecular biology can be abstract and intimidating. Watching students struggle with understanding proteins and DNA inspired the creation of AION Bio.
+            <span class="quote-author">
+                <span class="quote-author-name">AION BIO</span>
+            </span>
+        </blockquote>
+    </section>
+
+    <section id="journey" class="section">
+        <div class="content">
+            <h2>Our journey</h2>
+            <p>We envisioned a tool that turns sequences into 3D visualizations, explains folding and interactions, and adapts to each student's learning style.</p>
+            <p>What started as a personal passion project evolved into an interactive AI platform designed to make biology tangible, engaging, and personalized for every learner.</p>
+            <p>Over the last decade, our team has been responsible for some of the biggest research breakthroughs in AI, many of which underpin the flourishing molecular biology education we see today.</p>
+        </div>
+    </section>
+
+    <section id="models" class="section">
+        <div class="content">
+            <h2>Our model</h2>
+            <p>At the core of AION Bio is a smart AI tutor that studies how students interact with concepts.</p>
+            <p><strong>Input:</strong> Students enter a protein, DNA, or RNA sequence.</p>
+            <p><strong>Visualize:</strong> The AI generates a 3D structure, highlights active sites, and shows folding.</p>
+            <p><strong>Personalize:</strong> It observes how students explore, identifies hesitation or mistakes, and provides adaptive explanations, analogies, and mini-quizzes.</p>
+            <p><strong>Learn & Improve:</strong> Each interaction helps the AI give even better guidance the next time.</p>
+            <p>This ensures every student experiences hands-on, interactive learning tailored to their style, making molecular biology both fun and memorable.</p>
+        </div>
+        <div class="image-container">
+            <div class="placeholder-image">AI Learning Model Diagram</div>
+        </div>
+    </section>
+
+    <script>
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.2 });
+
+        document.querySelectorAll('.section, .visual-section').forEach(el => observer.observe(el));
+
+        const sections = document.querySelectorAll('.section');
+        const tabs = document.querySelectorAll('.tabs li');
+
+        const tabObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    tabs.forEach(tab => tab.classList.remove('active'));
+                    const activeTab = document.querySelector(`.tabs li[data-target="${entry.target.id}"]`);
+                    if (activeTab) {
+                        activeTab.classList.add('active');
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+
+        sections.forEach(section => tabObserver.observe(section));
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetId = tab.dataset.target;
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
