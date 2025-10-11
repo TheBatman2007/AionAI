@@ -529,6 +529,100 @@
     <section class="setup-section">
         <div class="container">
             <h2 class="section-title">Setup Guide</h2>
+            
+            <!-- Prerequisites -->
+            <div class="console" style="margin-bottom: 32px;">
+                <div class="console-header">
+                    <div class="console-dots">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                    <div class="console-title">Step 1: Prerequisites</div>
+                </div>
+
+                <div class="command-block">
+                    <div class="command-label">Install Required Libraries</div>
+                    <div class="command-wrapper">
+                        <div class="command">pip install pillow requests</div>
+                        <button class="copy-btn" onclick="copyCommand('pip install pillow requests')">Copy</button>
+                    </div>
+                </div>
+
+                <div class="command-block">
+                    <div class="command-label">Optional: Enable Web Search (place LLM.py in same directory)</div>
+                    <div class="command-wrapper">
+                        <div class="command" style="font-size: 0.85rem; color: #5f6368;">LLM.py enables latest research lookup for genetic disorders</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Key Setup -->
+            <div class="console" style="margin-bottom: 32px;">
+                <div class="console-header">
+                    <div class="console-dots">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                    <div class="console-title">Step 2: Get Your API Key</div>
+                </div>
+
+                <div class="command-block">
+                    <div class="command-label" style="color: #d93025; font-weight: 600;">⚠️ IMPORTANT: Configure OpenRouter API Key</div>
+                    <div style="background: #fce8e6; border: 1px solid #f4b4b0; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+                        <p style="font-size: 0.95rem; color: #5f6368; line-height: 1.6; margin: 0;">
+                            If the embedded API key fails:<br>
+                            1. Visit <a href="https://openrouter.ai" style="color: #4285f4; text-decoration: none;">OpenRouter</a><br>
+                            2. Sign in and generate a new API key<br>
+                            3. Replace the key in med3.py (line 29)
+                        </p>
+                    </div>
+                    <div class="command-wrapper">
+                        <div class="command">OPENROUTER_API_KEY = "sk-or-v1-YOUR_NEW_KEY_HERE"</div>
+                        <button class="copy-btn" onclick="copyCommand('OPENROUTER_API_KEY = &quot;sk-or-v1-YOUR_NEW_KEY_HERE&quot;')">Copy</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Run Script -->
+            <div class="console" style="margin-bottom: 32px;">
+                <div class="console-header">
+                    <div class="console-dots">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                    <div class="console-title">Step 3: Run the Script</div>
+                </div>
+
+                <div class="command-block">
+                    <div class="command-label">Start AION AI Diagnostic System</div>
+                    <div class="command-wrapper">
+                        <div class="command">python med3.py</div>
+                        <button class="copy-btn" onclick="copyCommand('python med3.py')">Copy</button>
+                    </div>
+                </div>
+
+                <div class="command-block">
+                    <div class="command-label">Example Input Prompts</div>
+                    <div style="background: #f8f9fa; border: 1px solid #dadce0; border-radius: 8px; padding: 16px; margin-top: 12px;">
+                        <p style="font-family: 'Monaco', monospace; font-size: 0.9rem; color: #202124; line-height: 1.8; margin: 0;">
+                            Enter input mode ('file' or 'url'): <span style="color: #4285f4;">file</span><br>
+                            Enter the path to the image file: <span style="color: #4285f4;">lab_report.jpg</span><br>
+                            Enter patient details:<br>
+                            Age (e.g., '6 months'): <span style="color: #4285f4;">6 months</span><br>
+                            Sex (male/female): <span style="color: #4285f4;">male</span><br>
+                            Symptoms (comma-separated): <span style="color: #4285f4;">vomiting, lethargy, poor feeding</span><br>
+                            Family history: <span style="color: #4285f4;">consanguineous parents</span><br>
+                            Clinical notes: <span style="color: #4285f4;">metabolic acidosis suspected</span><br>
+                            Perform deep analysis? (yes/no): <span style="color: #4285f4;">yes</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Troubleshooting -->
             <div class="console">
                 <div class="console-header">
                     <div class="console-dots">
@@ -536,38 +630,37 @@
                         <div class="dot"></div>
                         <div class="dot"></div>
                     </div>
-                    <div class="console-title">Terminal — Installation</div>
+                    <div class="console-title">Troubleshooting</div>
                 </div>
 
                 <div class="command-block">
-                    <div class="command-label">Install AION AI</div>
+                    <div class="command-label">Fix: "No module named 'PIL'"</div>
                     <div class="command-wrapper">
-                        <div class="command">pip install aionai</div>
-                        <button class="copy-btn" onclick="copyCommand('pip install aionai')">Copy</button>
+                        <div class="command">pip install pillow</div>
+                        <button class="copy-btn" onclick="copyCommand('pip install pillow')">Copy</button>
                     </div>
                 </div>
 
                 <div class="command-block">
-                    <div class="command-label">Install PyTorch</div>
-                    <div class="command-wrapper">
-                        <div class="command">pip install torch torchvision torchaudio</div>
-                        <button class="copy-btn" onclick="copyCommand('pip install torch torchvision torchaudio')">Copy</button>
+                    <div class="command-label">Fix: API Error (401) Unauthorized</div>
+                    <div style="background: #e8f0fe; border: 1px solid #4285f4; border-radius: 8px; padding: 16px; margin-top: 12px;">
+                        <p style="font-size: 0.9rem; color: #202124; line-height: 1.6; margin: 0;">
+                            1. Go to <a href="https://openrouter.ai" style="color: #4285f4;">OpenRouter</a> and sign in<br>
+                            2. Navigate to Keys → Create Key<br>
+                            3. Copy the key (starts with sk-or-v1-)<br>
+                            4. Open med3.py and replace line 29<br>
+                            5. Save and re-run the script
+                        </p>
                     </div>
                 </div>
 
                 <div class="command-block">
-                    <div class="command-label">Install Dependencies</div>
-                    <div class="command-wrapper">
-                        <div class="command">pip install biopython numpy pandas matplotlib</div>
-                        <button class="copy-btn" onclick="copyCommand('pip install biopython numpy pandas matplotlib')">Copy</button>
-                    </div>
-                </div>
-
-                <div class="command-block">
-                    <div class="command-label">Run AION AI</div>
-                    <div class="command-wrapper">
-                        <div class="command">python run_aion.py</div>
-                        <button class="copy-btn" onclick="copyCommand('python run_aion.py')">Copy</button>
+                    <div class="command-label">Fix: Port 8000 Already in Use</div>
+                    <div style="background: #f8f9fa; border: 1px solid #dadce0; border-radius: 8px; padding: 16px; margin-top: 12px;">
+                        <p style="font-size: 0.9rem; color: #5f6368; line-height: 1.6; margin: 0;">
+                            Edit the port number in med3.py:<br>
+                            <code style="background: #e8eaed; padding: 2px 8px; border-radius: 4px; font-family: Monaco, monospace;">port = 8001</code>
+                        </p>
                     </div>
                 </div>
             </div>
